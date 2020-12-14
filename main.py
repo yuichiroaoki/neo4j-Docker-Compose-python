@@ -28,11 +28,8 @@ class Neo4jServer:
         """
         try:
             GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'password'), encrypted=False)
-        except ServiceUnavailable:
+        except:
             print('neo4j is not available yet.')
-            return False
-        except Exception as e:
-            print(e)
             return False
         print('neo4j is already available.')
         return True

@@ -15,4 +15,4 @@ services:
       
     environment:
       - NEO4J_AUTH=neo4j/password
-      - EXTENSION_SCRIPT=./script/import_csv.sh # 起動時に実行するスクリプト
+      - EXTENSION_SCRIPT=script/import_csv.sh # 起動時に実行するスクリプト
