@@ -9,10 +9,13 @@ class Neo4jServer:
         """
         dockerコンテナを起動する
         """
-        subprocess.run(['docker-compose', 'up', '-d'],
+        subprocess.run(['docker-compose', 'up'],
         capture_output=True, text=True, check=True)
         while self.__neo4j_available() is False:
             time.sleep(10)
+            
+        # if start_neo4j.returncode != 0:
+        #     print(start_neo4j.stderr)
         return self
 
     def __exit__(self, exc_type, exc_value, tb):
