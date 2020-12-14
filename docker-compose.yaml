@@ -11,8 +11,7 @@ services:
       - ./logs:/logs
       - ./conf:/conf
       - ./import:/import # ここにCSVファイルを配置
-      - ./script:/script # ここに起動時実行するスクリプトを配置
       
     environment:
       - NEO4J_AUTH=neo4j/password
-      - EXTENSION_SCRIPT=script/import_csv.sh # 起動時に実行するスクリプト
+      - EXTENSION_SCRIPT=import_csv.sh # 起動時に実行するスクリプト

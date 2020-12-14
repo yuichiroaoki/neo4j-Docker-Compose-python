@@ -1,11 +1,5 @@
 #!/bin/bash
-set -euC
-
-# CSVファイルがなければ何もしない
-if [[ "$(ls -1 /import | wc -l)" == "0" ]]; then
-    echo "import csv skipped."
-    return
-fi
+set -eu
 
 # データを全削除
 echo "delete database started."

@@ -9,7 +9,8 @@ class Neo4jServer:
         """
         dockerコンテナを起動する
         """
-        subprocess.call(['docker-compose', 'up', '-d'])
+        subprocess.run(['docker-compose', 'up', '-d'],
+        capture_output=True, text=True, check=True)
         while self.__neo4j_available() is False:
             time.sleep(10)
         return self
@@ -20,7 +21,7 @@ class Neo4jServer:
         """
         if tb is not None:
             print(''.join(traceback.format_tb(tb)))
-        subprocess.call(['docker-compose', 'stop'])
+        subprocess.run(['docker-compose', 'stop'])
 
     def __neo4j_available(self) -> bool:
         """
