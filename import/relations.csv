@@ -1,4 +1,4 @@
-Node:START_ID,Node:END_ID,score:float
-1,2,0.412
-1,3,0.623
-3,4,0.512
+:START_ID(nodeLabel),:END_ID(nodeLabel),:TYPE
+1,2,LASSO
+1,3,LASSO
+3,4,LASSO

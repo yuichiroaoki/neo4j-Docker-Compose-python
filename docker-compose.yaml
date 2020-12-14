@@ -7,11 +7,12 @@ services:
       - "7474:7474" # 管理画面用port
       - "7687:7687" # websocket用port
     volumes:
-      - ./data:/data
-      - ./logs:/logs
-      - ./conf:/conf
-      - ./import:/import # ここにCSVファイルを配置
+      - ${HOME}/neo4j/data:/data
+      - ${HOME}/neo4j/logs:/logs
+      - ${HOME}/neo4j/conf:/conf
+      - ${HOME}/neo4j/import:/import # ここにCSVファイルを配置
+      - ${HOME}/neo4j/script:/script # ここに起動時実行するスクリプトを配置
       
     environment:
       - NEO4J_AUTH=neo4j/password
-      - EXTENSION_SCRIPT=import_csv.sh # 起動時に実行するスクリプト
+      - EXTENSION_SCRIPT=script/import_csv.sh # 起動時に実行するスクリプト
