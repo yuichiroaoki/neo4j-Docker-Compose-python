@@ -7,6 +7,5 @@ echo "importing csv started."
   --database testdata \
   --nodes import/nodes.csv \
   --relationships import/relations.csv 
-  --id-type INTEGER
 echo "importing csv finished."
 

@@ -15,4 +15,5 @@ services:
       
     environment:
       - NEO4J_AUTH=neo4j/password
+      - NEO4J_dbms_default__database=smalldata
       # - EXTENSION_SCRIPT=script/import_csv.sh # 起動時に実行するスクリプト
