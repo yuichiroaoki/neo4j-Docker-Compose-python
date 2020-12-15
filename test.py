@@ -5,6 +5,6 @@ p2 = subprocess.run(['docker-compose', 'up'],
 
 if p2.returncode != 0:
     # エラーメッセージ表示
-    print(p1.stderr)
+    print(p2.stderr)
 else:
     print('success')
