@@ -1,6 +1,5 @@
 from schema import Schema, And, Use, Optional, SchemaError
 
-
 class GraphData():
 
     def check_data_type(self, graphData):
@@ -15,7 +14,8 @@ class GraphData():
                 'y': (float)
             }
         }])
-        return schema.validate(graphData)
+        if not schema.validate(graphData):
+            return schema.validate(graphData)
     
     def  check_if_the_id_is_unique(self, graphData):
         list_of_ids = []
@@ -25,9 +25,6 @@ class GraphData():
         if len(list_of_ids) > len(set(list_of_ids)):
             print("ID should be unique")
             return False
-        else:
-            return True
-
 
 uploaded_data = [
     {"data": {"id": "254126",
@@ -37,12 +34,15 @@ uploaded_data = [
                 "x": -269.9039611816406,
                 "y": 420.89410400390625
             }
-    },{"data": {"source": "244521", "target": "280038", "id": "244521:280038"}},
+    },{"data": {"source": "244521", "target": "280038", "id": '280038'}},
     {"data": {"source": "244521", "target": "280038", "id": "244521:d"}},
     {"data": {"source": "244521", "target": "280038", "id": "244521:d"}}
 ]
 
 example = GraphData()
-print(example.check_data_type(uploaded_data))
-print(example.check_if_the_id_is_unique(uploaded_data))
+if example.check_data_type(uploaded_data):
+    print(example.check_data_type(uploaded_data))
+
+if example.check_if_the_id_is_unique(uploaded_data):
+    print(example.check_if_the_id_is_unique(uploaded_data))
 
