@@ -1,5 +1,4 @@
 import subprocess, os
-from time import sleep
 
 class Neo4jUploader(object):
 
