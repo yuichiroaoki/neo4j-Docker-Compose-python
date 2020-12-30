@@ -13,8 +13,11 @@ class Neo4jUploader(object):
                 capture_output=True, text=True, encoding="utf-8_sig" 
             )
             if adminImportResponse.returncode != 0:
+                self.after_import_fail(db_name)
                 # エラーメッセージ表示
                 return adminImportResponse.stdout
+            else:
+                self.after_import_success(db_name)
 
         def after_import_success(self, db_name):
             self.dockerComposeDown()
@@ -23,7 +26,6 @@ class Neo4jUploader(object):
             if command.returncode != 0:
                 return command.stdout
 
-            
         def dockerComposeDown(self):
             command = subprocess.run(['docker-compose', 'down'],
                 capture_output=True, text=True, encoding="utf-8_sig")
@@ -50,9 +52,9 @@ class Neo4jUploader(object):
                 return delete_transaction.stderr
 
 exampleCmd = Neo4jUploader()
-# result = exampleCmd.commandRunner("testone", "import", "newneo4j_neo4j_1", "nodes.csv", "relations.csv")
+result = exampleCmd.commandRunner("testone", "import", "newneo4j_neo4j_1", "nodes.csv", "relations.csv")
 # result = exampleCmd.after_import_success("testdata")
-result = exampleCmd.after_import_fail("newdata")
+# result = exampleCmd.after_import_fail("newdata")
 if result:
     print(result)
 else:
