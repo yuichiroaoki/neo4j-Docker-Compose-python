@@ -1,4 +1,5 @@
-import subprocess
+import subprocess, os
+from time import sleep
 
 class Neo4jUploader(object):
 
@@ -19,13 +20,11 @@ class Neo4jUploader(object):
 
         def after_import_success(self, db_name):
             self.dockerComposeDown()
-            SetDB_name = 'DB_name=' + db_name
-            command = subprocess.run([SetDB_name, 'docker-compose', 'up'], \
-                capture_output=True, \
-                text=True, encoding="utf-8_sig" \
-            )
+            set_env = {**os.environ, 'DB_name': db_name}
+            command = subprocess.run(['docker-compose', 'up'], env=set_env)
             if command.returncode != 0:
                 return command.stdout
+
             
         def dockerComposeDown(self):
             command = subprocess.run(['docker-compose', 'down'], \
