@@ -17,14 +17,32 @@ class Neo4jUploader(object):
                 # エラーメッセージ表示
                 return adminImportResponse.stdout
 
+        def after_import_success(self, db_name):
+            self.dockerComposeDown()
+            SetDB_name = 'DB_name=' + db_name
+            command = subprocess.run([SetDB_name, 'docker-compose', 'up'], \
+                capture_output=True, \
+                text=True, encoding="utf-8_sig" \
+            )
+            if command.returncode != 0:
+                return command.stdout
+            
+        def dockerComposeDown(self):
+            command = subprocess.run(['docker-compose', 'down'], \
+                capture_output=True, \
+                text=True, encoding="utf-8_sig" \
+            )
+            if command.returncode != 0:
+                return command.stdout
+
 
 exampleCmd = Neo4jUploader()
-result = exampleCmd.commandRunner("testone", "import", "newneo4j_neo4j_1", "nodes.csv", "relations.csv")
+# result = exampleCmd.commandRunner("testone", "import", "newneo4j_neo4j_1", "nodes.csv", "relations.csv")
+result = exampleCmd.after_import_success("testdata")
 if result:
     print(result)
 else:
     print('success')
-    print(result)
 # adminImportResponse = subprocess.run(['docker', 'exec', '-it', 'newneo4j_neo4j_1', './bin/neo4j-admin',\
 #     'import','--database', 'pro', '--nodes', \
 #     'import/nodes.csv', '--relationships', 'import/relationsN.csv'],\
