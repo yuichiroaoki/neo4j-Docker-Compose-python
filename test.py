@@ -1,4 +1,5 @@
-import subprocess, os
+import subprocess, os, errno
+from pathlib import Path
 
 class Neo4jUploader(object):
 
@@ -8,11 +9,9 @@ class Neo4jUploader(object):
             adminImportResponse = subprocess.run(['docker', 'exec', '-it', container_name, '/var/lib/neo4j/bin/neo4j-admin', 'import', \
                 '--database', db_name, \
                 '--nodes', node_file_path, \
-                '--relationships', edge_file_path ], \
-                capture_output=True, \
-                text=True, encoding="utf-8_sig" \
+                '--relationships', edge_file_path ],
+                capture_output=True, text=True, encoding="utf-8_sig" 
             )
-            print(node_file_path)
             if adminImportResponse.returncode != 0:
                 # エラーメッセージ表示
                 return adminImportResponse.stdout
@@ -26,22 +25,39 @@ class Neo4jUploader(object):
 
             
         def dockerComposeDown(self):
-            command = subprocess.run(['docker-compose', 'down'], \
-                capture_output=True, \
-                text=True, encoding="utf-8_sig" \
-            )
+            command = subprocess.run(['docker-compose', 'down'],
+                capture_output=True, text=True, encoding="utf-8_sig")
             if command.returncode != 0:
                 return command.stdout
 
+        def after_import_fail(self, db_name):
+            path_to_databases = Path('data/databases/' + db_name)
+            path_to_transactions = Path('data/transactions/' + db_name)
+
+            if not path_to_databases.exists():
+                raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path_to_databases)
+            if not path_to_transactions.exists():
+                raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), path_to_transactions)
+
+            delete_database = subprocess.run(['rm', '-rf', path_to_databases], 
+                capture_output=True, text=True, encoding="utf-8_sig")
+            delete_transaction = subprocess.run(['rm', '-rf', path_to_transactions], 
+                capture_output=True, text=True, encoding="utf-8_sig")
+            
+            if delete_database.returncode != 0:
+                return delete_database.stderr
+            if delete_transaction.returncode != 0:
+                return delete_transaction.stderr
 
 exampleCmd = Neo4jUploader()
 # result = exampleCmd.commandRunner("testone", "import", "newneo4j_neo4j_1", "nodes.csv", "relations.csv")
-result = exampleCmd.after_import_success("testdata")
+# result = exampleCmd.after_import_success("testdata")
+result = exampleCmd.after_import_fail("newdata")
 if result:
     print(result)
 else:
     print('success')
-# adminImportResponse = subprocess.run(['docker', 'exec', '-it', 'newneo4j_neo4j_1', './bin/neo4j-admin',\
+# adminImportResponse = subprocess.run(['docker', 'exec', '-it', 'newneo4j_neo4j_1', '/var/lib/neo4j/bin/neo4j-admin',\
 #     'import','--database', 'pro', '--nodes', \
 #     'import/nodes.csv', '--relationships', 'import/relationsN.csv'],\
 #     capture_output=True, \
