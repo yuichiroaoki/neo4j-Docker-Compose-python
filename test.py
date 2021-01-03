@@ -3,9 +3,9 @@ from pathlib import Path
 
 class Neo4jUploader(object):
 
-        def commandRunner(self, db_name, project_name, container_name, node_file, edge_file):
-            node_file_path = project_name + "/" + node_file
-            edge_file_path = project_name + "/" + edge_file
+        def commandRunner(self, db_name, container_name, node_file, edge_file):
+            node_file_path = "import/" + node_file
+            edge_file_path = "import/" + edge_file
             adminImportResponse = subprocess.run(['docker', 'exec', '-it', container_name, '/var/lib/neo4j/bin/neo4j-admin', 'import', \
                 '--database', db_name, \
                 '--nodes', node_file_path, \
@@ -52,7 +52,7 @@ class Neo4jUploader(object):
                 return delete_transaction.stderr
 
 exampleCmd = Neo4jUploader()
-result = exampleCmd.commandRunner("testone", "import", "newneo4j_neo4j_1", "nodes.csv", "relations.csv")
+result = exampleCmd.commandRunner("testone", "newneo4j_neo4j_1", "nodes.csv", "relations.csv")
 # result = exampleCmd.after_import_success("testdata")
 # result = exampleCmd.after_import_fail("newdata")
 if result:
