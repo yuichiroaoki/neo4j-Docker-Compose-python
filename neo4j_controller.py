@@ -34,8 +34,8 @@ class Neo4jController(object):
         if command.returncode != 0:
             return command.stdout
 
-    def dockerComposeDown(self):
-        command = subprocess.run(['docker-compose', 'down'],
+    def dockerComposeRestart(self, service_name):
+        command = subprocess.run(['docker-compose', 'restart',  service_name],
             capture_output=True, text=True, encoding="utf-8_sig")
         if command.returncode != 0:
             return command.stdout
