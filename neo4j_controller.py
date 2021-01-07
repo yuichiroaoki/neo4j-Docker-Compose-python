@@ -28,7 +28,7 @@ class Neo4jController(object):
             self.after_import_success(db_name)
 
     def after_import_success(self, db_name):
-        self.dockerComposeDown()
+        self.dockerComposeRestart("neo4j")
         set_env = {**os.environ, 'DB_name': db_name}
         command = subprocess.run(['docker-compose', 'up'], env=set_env)
         if command.returncode != 0:
@@ -72,8 +72,8 @@ class Neo4jController(object):
     @staticmethod
     def change_database(tx, db_name):
         query = (
-            "USE $db_name "
-            "MATCH p=()-->() RETURN p "
+            f"USE {db_name} "
+            " MATCH p=()-->() RETURN p "
         )
         result = tx.run(query, db_name=db_name)
 
@@ -89,4 +89,4 @@ url = f"{scheme}://{host_name}:{port}"
 user = "neo4j"
 password = "password"
 exampleCmd = Neo4jController(url, user, password)
-result = exampleCmd.run_command("testone")
+result = exampleCmd.run_command("smalldata")
