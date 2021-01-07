@@ -75,7 +75,7 @@ class Neo4jController(object):
             f"USE {db_name} "
             " MATCH p=()-->() RETURN p "
         )
-        result = tx.run(query, db_name=db_name)
+        result = tx.run(query)
 
         try:
             return [record for record in result]
